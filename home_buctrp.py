@@ -1,5 +1,6 @@
 import json
 import time
+
 import requests
 
 url = "https://eai.buct.edu.cn/ncov/wap/default/save"
@@ -13,10 +14,10 @@ cookies = {
     'eai-sess':'buctreport666666homo114514', # 企业微信页面cookie
 }
 data = {
-    'ismoved': '0', # 是否位移
     'sfzx': '0',  # 是否在校
-
+    'sfzgn': '1',   # 所在地点中国大陆
     'zgfxdq': '0',  # 中高风险地区
+    
     "buctzctw": "2",    # 今日早晨体温范围(36℃-36.9℃)
     "buctzwtw": "2",    # 今日中午体温范围(36℃-36.9℃)
     "buctwjtw": "2",    # 今日晚间体温范围(36℃-36.9℃)
@@ -45,7 +46,7 @@ data = {
         },
         'message': 'Get geolocation success.Convert Success.Get address success.',
         'location_type': 'geo',
-        'accuracy': 40,
+        'accuracy': None,
         'isConverted': True,
         'addressComponent': {
             'citycode': '0892',  # 区号
@@ -77,7 +78,7 @@ while connect_times < 3:
         result = buct_session.post(url, data=data, headers=headers, cookies=cookies, timeout=15)
         print(
             "北化疫情打卡 " + time.strftime("%m月%d日 %H:%M:%S ", time.localtime())
-            + name + ' ' + json.loads(result.text)['m'])
+            + name + ' ' + data['city'] + ' ' + json.loads(result.text)['m'])
         break
     except requests.exceptions.ConnectionError:
         print(time.strftime("%m/%d %H:%M:%S ", time.localtime())+ name + ' 网络异常！')
